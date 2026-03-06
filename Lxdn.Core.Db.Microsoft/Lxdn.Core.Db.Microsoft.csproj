@@ -14,7 +14,7 @@
   <ItemGroup>
     <PackageReference Include="Lxdn.Core" Version="2.1.5" />
     <PackageReference Include="System.Data.OleDb" Version="4.6.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
 
 </Project>
