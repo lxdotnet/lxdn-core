@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <!--<TargetFramework>netcoreapp2.1</TargetFramework>-->
-    <TargetFrameworks>net6.0;net461;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net48;netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>2.2.5</Version>
+    <Version>2.2.6</Version>
     <Authors>Alexander Dolnik</Authors>
     <Company>private</Company>
     <Product>Lxdn.Core</Product>
     <Description>The stuff I missed to be built-in into .net framework</Description>
-    <Copyright>(C) 2014-2023 Alexander Dolnik</Copyright>
+    <Copyright>(C) 2014-2026 Alexander Dolnik</Copyright>
     <PackageProjectUrl>https://github.com/lxdotnet/lxdn-core/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/lxdotnet/lxdn-core/</RepositoryUrl>
     <PackageId>Lxdn.Core</PackageId>
@@ -20,7 +20,7 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -38,7 +38,7 @@
     <DefineConstants>NETSTANDARD;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net461'">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net48'">
     <DefineConstants>NETFULL</DefineConstants>
   </PropertyGroup>
 
@@ -54,7 +54,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
     <Optimize>False</Optimize>
   </PropertyGroup>
 

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;net45</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;net48</TargetFrameworks>
     <Authors>Alexander Dolnik</Authors>
     <Company>private</Company>
     <Product />
@@ -26,7 +26,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Lxdn.Core" Version="2.1.5" />
+    <PackageReference Include="Lxdn.Core" Version="2.1.6" />
   </ItemGroup>
 
 </Project>

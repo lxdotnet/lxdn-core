@@ -6,9 +6,9 @@ using System.Globalization;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 using Lxdn.Core.Basics;
-using System.Runtime.Serialization;
 
 namespace Lxdn.Core.Extensions
 {
@@ -102,9 +102,9 @@ namespace Lxdn.Core.Extensions
 
                 if (!target.IsEnum/*only known exception*/)
                     return Convert.ChangeType(obj, target, culture);
-                
+
                 // here when target is en enum:
-                if (typeof (string) == source)
+                if (typeof(string) == source)
                 {
 #if NETCORE
                     if (Enum.TryParse(target, (string)obj, true, out object member))
@@ -138,7 +138,7 @@ namespace Lxdn.Core.Extensions
         public static TResult ChangeType<TResult>(this object obj, CultureInfo culture)
             => (TResult)obj.ChangeType(typeof(TResult), culture);
 
-        public static TResult ChangeType<TResult>(this object obj) 
+        public static TResult ChangeType<TResult>(this object obj)
             => (TResult)obj.ChangeType(typeof(TResult), CultureInfo.InvariantCulture);
 
         public static TTarget SetValue<TTarget>(this TTarget target, PropertyInfo property, object value)
@@ -153,7 +153,7 @@ namespace Lxdn.Core.Extensions
         public static bool IsOneOf<TItem>(this TItem item, params TItem[] values)
             => values.Any(value => Equals(value, item));
 
-        public static bool IsOneOf<TItem>(this TItem item, IEnumerable<TItem> values) 
+        public static bool IsOneOf<TItem>(this TItem item, IEnumerable<TItem> values)
             => IsOneOf(item, values.ToArray());
 
         public static bool NotIn<TItem>(this TItem item, params TItem[] values)
@@ -170,17 +170,14 @@ namespace Lxdn.Core.Extensions
             return o.GetDynamicMetaObject()
                     .IfExists(dynamic => dynamic
                     .GetDynamicMemberNames()
-                    .ToDictionary(name => name, name => ((dynamic)o)[name], comparer)) 
+                    .ToDictionary(name => name, name => ((dynamic)o)[name], comparer))
                    ??
                    o.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)
                     .Where(property => property.HasPublicGetter())
                     .ToDictionary(property => property.Name, property => property.GetValue(o), comparer);
         }
 
-        public static object Call(this object item, string method, params object[] parameters)
-        {
-            return item.GetType().GetMethod(method).Invoke(item, parameters);
-        }
+        public static object Call(this object item, string method, params object[] parameters) => item.GetType().GetMethod(method).Invoke(item, parameters);
 
         //public static IPropertyAccessor PropertyOf(this object item, string name, bool caseSensitive = false, BindingFlags flags = BindingFlags.Public | BindingFlags.Instance)
         //{
@@ -193,14 +190,11 @@ namespace Lxdn.Core.Extensions
         //        ?.CreateAccessor(item);
         //}
 
-        public static int HashUsing<TItem>(this TItem item, params Func<TItem, object>[] properties)
-        {
-            unchecked // inspired by https://stackoverflow.com/questions/263400/what-is-the-best-algorithm-for-an-overridden-system-object-gethashcode
-            {
-                return properties.Aggregate((int) 2166136261, (hash, propertyOf) =>
-                    (hash * 16777619) ^ (propertyOf(item)?.GetHashCode() ?? 0));
-            }
-        }
+        
+
+        public static int HashUsing<TItem>(this TItem item, params Func<TItem, object>[] properties) 
+            => unchecked(properties.Aggregate((int)2166136261, (hash, propertyOf) 
+                => Hash.Combine(hash, propertyOf(item)?.GetHashCode() ?? 0)));
 
         private static TInput InterpretAs<TInput>(this TInput obj, Expression<Func<TInput, DateTime>> lambda, DateTimeKind kind)
             where TInput : class
@@ -212,17 +206,11 @@ namespace Lxdn.Core.Extensions
             return obj.SetValue(property, dateTime);
         }
 
-        public static TInput InterpretAsUtcTime<TInput>(this TInput obj, Expression<Func<TInput, DateTime>> dateTime)
-            where TInput : class
-        {
-            return InterpretAs(obj, dateTime, DateTimeKind.Utc);
-        }
+        public static TInput InterpretAsUtcTime<TInput>(this TInput obj, Expression<Func<TInput, DateTime>> dateTime) where TInput : class 
+            => InterpretAs(obj, dateTime, DateTimeKind.Utc);
 
-        public static TInput InterpretAsLocalTime<TInput>(this TInput obj, Expression<Func<TInput, DateTime>> dateTime)
-            where TInput : class
-        {
-            return InterpretAs(obj, dateTime, DateTimeKind.Local);
-        }
+        public static TInput InterpretAsLocalTime<TInput>(this TInput obj, Expression<Func<TInput, DateTime>> dateTime) where TInput : class 
+            => InterpretAs(obj, dateTime, DateTimeKind.Local);
 
         public static DynamicMetaObject GetDynamicMetaObject(this object o)
             => (o as IDynamicMetaObjectProvider)?.GetMetaObject(Expression.Constant(o));
